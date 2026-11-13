@@ -6,11 +6,7 @@ import Integrantes from './pages/Integrantes';
 import Faq from './pages/Faq';
 import Contato from './pages/Contato';
 import NotFound from './pages/NotFound';
-import SolucaoDados from './pages/SolucaoDados';
-import Ranking from './pages/Ranking';
-import Missoes from './pages/Missoes';
-import MissaoDetalhe from './pages/Missaodetalhe';
-import Vouchers from './pages/Vouchers';
+
 
 export default function App() {
   return (
@@ -23,12 +19,7 @@ export default function App() {
         <Route path="/integrantes" element={<Integrantes />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/contato" element={<Contato />} />
-        <Route path="/solucao" element={<SolucaoDados />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/ranking" element={<Ranking />} />
-        <Route path="/missoes" element={<Missoes />} />
-        <Route path="/missoes/:id" element={<MissaoDetalhe />} />
-        <Route path="/vouchers" element={<Vouchers />} />
       </Routes>
     </>
   );
