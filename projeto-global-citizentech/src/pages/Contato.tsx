@@ -39,7 +39,7 @@ function Contato() {
   const onSubmit: SubmitHandler<FormularioContato> = async (dados) => {
     try {
       const resposta = await fetch(
-        'https://climacidadao-java.onrender.com/contatos',
+        `${import.meta.env.VITE_API_URL ?? 'https://climacidadao-java.onrender.com'}/contatos`,
         {
           method: 'POST',
           headers: {
@@ -71,7 +71,7 @@ function Contato() {
     }
   }
 
-  
+
   return (
     <>
       <main className="mx-auto w-full max-w-[720px] px-4 py-12">
