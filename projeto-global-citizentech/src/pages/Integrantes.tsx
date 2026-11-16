@@ -1,3 +1,4 @@
+
 import alvaroImg from '../assets/img/alvaro.jpg'
 import arthurImg from '../assets/img/arthur.jpg'
 import dhiegoImg from '../assets/img/dhiego.jpg'
@@ -66,11 +67,11 @@ function Integrantes() {
         {/* .integrantes-hero */}
         <section className="mb-8 max-w-[720px] text-left">
           <span className="mb-2 block text-[0.84rem] font-semibold text-[var(--color-leaf)]">
-            Equipe SoulDevs
+            Equipe CitizenTech
           </span>
           <h1 className="mt-0 mb-3">Integrantes do grupo</h1>
           <p className="m-0 leading-relaxed text-[var(--color-muted)]">
-            Os cinco estudantes responsáveis por planejar, projetar e desenvolver o ECO Mobility SoulUp.
+            Os cinco estudantes responsáveis por planejar, projetar e desenvolver o CitizenTech.
           </p>
         </section>
 
@@ -110,15 +111,16 @@ function Integrantes() {
         <section className="mx-auto mt-8 w-full max-w-[720px] rounded-2xl border-t-4 border-t-[var(--color-leaf)] bg-[var(--color-surface)] p-6 shadow-md sm:p-8">
           <h2 className="mt-0 mb-2">Sobre nós</h2>
           <p className="m-0 text-[0.9rem] leading-relaxed text-[var(--color-muted)]">
-            Somos os integrantes da equipe SoulDevs e trabalhamos juntos no desenvolvimento do ECO Mobility
-            SoulUp, unindo programação, organização e criatividade para transformar a proposta do Challenge
-            em uma solução de mobilidade urbana mais sustentável.
+            Somos os integrantes da equipe CitizenTech e trabalhamos juntos no desenvolvimento
+            de uma proposta voltada à informação e orientação climática, unindo programação,
+            organização e criatividade para ajudar os cidadãos a compreender melhor os riscos
+            relacionados às condições meteorológicas.
           </p>
         </section>
       </main>
 
       <footer className="w-full bg-[#231b54] px-10 py-6 text-white [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:py-5 text-center text-[0.84rem]">
-        <p className="m-0">&copy; Todos os direitos reservados — ECO Mobility SoulUp — 2026</p>
+        <p className="m-0">&copy; Todos os direitos reservados — CitizenTech — 2026</p>
       </footer>
     </>
   )

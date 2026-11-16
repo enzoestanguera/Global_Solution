@@ -1,27 +1,121 @@
-Link do Repositório no Github: https://github.com/enzoestanguera/economic_soul-up.git
+# CitizenTech — Global Solution FIAP 2026/2
 
-============================================================ ECO Mobility Soul Up ================================================================
+**Turma:** 1TDSPF  
+**Projeto:** CitizenTech — Informação e Orientação Climática
 
-Nossa ideia com esse projeto é tornar a vida das pessoas que são nosso público alvo mais tranquila e fácil no sentido de transporte público. O projeto se baseia em um sistema de missões que geram pontos para a pessoa, e com esses pontos podendo ser trocados por créditos, que por sua vez são gastos com passsagens de transporte público.
+## Sobre o projeto
 
-No projeto utilizamos mais HTML, TAILWIND, REACT, VITE e TYPESCRIPT.
+O CitizenTech é um projeto acadêmico desenvolvido para a Global Solution da FIAP.
 
-Nas pastas, temos a src que contém todo o conteúdo, a assets, contendo a pasta img, com as imagens, apasta components com o cabeçalho do site e a pasta pages, onde ficam todas as pastas do site.
+Nossa proposta é apresentar a importância das informações meteorológicas para o cotidiano das pessoas, especialmente no planejamento de deslocamentos e na prevenção de situações relacionadas a chuvas intensas, enchentes e outros eventos climáticos.
 
-Para executar esse projeto localmente, abra o terminal git bash no Visual Studio Code, e use o comando 
-npm install para instalar as dependências do projeto e após isso usar o comando npm run dev para executar o código e ver o site.
+O projeto aborda o uso de informações meteorológicas e dados de satélites como possibilidades para melhorar a orientação dos cidadãos.
 
-Dividimos as responsabilidades entre todos os integrantes da forma mais justa possível, separando em REACT e TAILWIND basicamente.
+Nesta versão, o site apresenta a proposta do projeto, informações sobre a solução, integrantes, perguntas frequentes e um formulário de contato.
 
-=============================================================== Integrantes ======================================================================
-Álvaro Morais Holanda - RM: 568607 Github: https://github.com/AlvaroHolanda Linkedin: https://www.linkedin.com/in/%C3%A1lvaro-holanda-b9bb03322/?isSelfProfile=true
+**Importante:** a aplicação ainda não realiza previsões meteorológicas em tempo real nem consulta automaticamente dados de satélites.
 
-Arthur Arruda da Silva - RM: 569593 Github: https://github.com/arthurarrudaa Linkedin: https://www.linkedin.com/in/arthur-arruda-61aa453b0/
+## Tecnologias utilizadas
 
-Dhiego Gozzo Belmonte - RM: 571505 Github: https://github.com/dhiegobelmonte Linkedin: https://www.linkedin.com/in/dhiego-belmonte-676440283/
+**Front-end:**
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- HTML
 
-Enzo Torres Estanguera - RM: 568937 Github: https://github.com/enzoestanguera Linkedin: linkedin.com/in/enzo-estanguera
+**API Java:**
+- Java 21
+- Spring Boot
+- JDBC
+- Oracle Database
+- Docker
+- Render
 
-Giovane Dias Chicoli - RM: 569750 Github: https://github.com/Giovvane Linkedin: https://www.linkedin.com/in/giovane-dias-chicoli-b06b05384/
+## Estrutura do projeto
 
-Contato: (11) 94357-8228 Giovanedc007@gmail.com
+- `src/assets`: imagens e recursos visuais.
+- `src/components`: componentes reutilizáveis, como o cabeçalho.
+- `src/pages`: páginas do site.
+- `src/services`: funções de comunicação com a API.
+
+O site possui as páginas Home, Sobre, Integrantes, FAQ e Contato.
+
+## Integração com a API Java
+
+O front-end CitizenTech utiliza a API Java **ClimaCidadão**, desenvolvida separadamente com Spring Boot e banco de dados Oracle.
+
+**URL da API:**  
+https://climacidadao-java.onrender.com
+
+**Repositório do Java:**  
+https://github.com/arthurarrudaa/climacidadao-java
+
+O formulário da página Contato realiza uma requisição HTTP `POST /contatos`, enviando nome, e-mail e mensagem para armazenamento no banco Oracle.
+
+A API Java também possui recursos de usuários, cidades favoritas e pesquisas climáticas. Esses recursos existem no back-end, mas não possuem interfaces de uso implementadas nas páginas atuais do site.
+
+O formulário de comentários da página FAQ é demonstrativo e não envia informações à API.
+
+## Como executar o front-end
+
+1. Abra o projeto no Visual Studio Code.
+2. Acesse a pasta `projeto-global-citizentech`.
+3. Abra o terminal e execute:
+
+```bash
+npm install
+npm run dev
+```
+
+4. Acesse o endereço local indicado pelo Vite, normalmente:
+
+`http://localhost:5173`
+
+Para verificar a compilação de produção:
+
+```bash
+npm run build
+```
+
+## Configuração da API
+
+O projeto utiliza a variável de ambiente `VITE_API_URL`, com o endereço-base da API Java.
+
+Exemplo:
+
+```env
+VITE_API_URL=https://climacidadao-java.onrender.com
+```
+
+A configuração pode ser consultada no arquivo `.env.example`.
+
+Caso a variável não esteja definida, o formulário utiliza o endereço público da API Java configurado no código.
+
+## Repositório GitHub
+
+**Repositório oficial do front-end:**  
+https://github.com/enzoestanguera/Global_Solution
+
+## Integrantes
+
+**Álvaro Morais Holanda — RM 568607**  
+GitHub: https://github.com/AlvaroHolanda
+
+**Arthur Arruda da Silva — RM 569593**  
+GitHub: https://github.com/arthurarrudaa
+
+**Dhiego Gozzo Belmonte — RM 571505**  
+GitHub: https://github.com/dhiegobelmonte
+
+**Giovane Dias Chicoli — RM 569750**  
+GitHub: https://github.com/Giovvane
+
+**Enzo Torres Estanguera — RM 568937**  
+GitHub: https://github.com/enzoestanguera
+
+**Turma:** 1TDSPF
+
+## Utilização de inteligência artificial
+
+O ChatGPT foi utilizado como ferramenta de apoio para desenvolvimento, revisão de código, integração da API e documentação. O grupo é responsável por compreender, testar e apresentar a implementação.

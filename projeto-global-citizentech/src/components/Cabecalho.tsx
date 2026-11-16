@@ -10,7 +10,7 @@ export function Cabecalho() {
         className="flex items-center no-underline"
       >
         <span className="font-['Poppins',sans-serif] text-3xl font-bold tracking-[0.05em] text-white">
-          S
+          C
         </span>
       </Link>
 
@@ -20,36 +20,6 @@ export function Cabecalho() {
         aria-label="Navegação principal"
       >
         <ul className="flex flex-wrap items-center justify-end gap-6 p-0 m-0 list-none max-[600px]:gap-3">
-          <li className="flex items-center gap-1.5">
-            <span className="text-[10px] text-white/60">•</span>
-            <Link
-              to="/missoes"
-              className="font-['Inter',sans-serif] text-xs font-medium text-white no-underline transition-opacity duration-200 hover:opacity-80"
-            >
-              Missões
-            </Link>
-          </li>
-
-          <li className="flex items-center gap-1.5">
-            <span className="text-[10px] text-white/60">•</span>
-            <Link
-              to="/vouchers"
-              className="font-['Inter',sans-serif] text-xs font-medium text-white no-underline transition-opacity duration-200 hover:opacity-80"
-            >
-              Vouchers
-            </Link>
-          </li>
-
-          <li className="flex items-center gap-1.5">
-            <span className="text-[10px] text-white/60">•</span>
-            <Link
-              to="/ranking"
-              className="font-['Inter',sans-serif] text-xs font-medium text-white no-underline transition-opacity duration-200 hover:opacity-80"
-            >
-              Ranking
-            </Link>
-          </li>
-
           <li className="flex items-center gap-1.5">
             <span className="text-[10px] text-white/60">•</span>
             <Link
