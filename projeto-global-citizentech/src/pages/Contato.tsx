@@ -50,6 +50,10 @@ function Contato() {
       )
 
       if (!resposta.ok) {
+        if (resposta.status === 400) {
+          throw new Error('Verifique os dados preenchidos no formulário.')
+        }
+
         throw new Error(`Erro ao enviar mensagem: ${resposta.status}`)
       }
 
@@ -57,11 +61,17 @@ function Contato() {
       reset()
     } catch (erro) {
       console.error('Erro ao enviar contato:', erro)
-      alert('Não foi possível enviar a mensagem. Tente novamente.')
+
+      const mensagem =
+        erro instanceof Error && erro.message === 'Verifique os dados preenchidos no formulário.'
+          ? erro.message
+          : 'Não foi possível enviar a mensagem. Tente novamente.'
+
+      alert(mensagem)
     }
   }
 
-
+  
   return (
     <>
       <main className="mx-auto w-full max-w-[720px] px-4 py-12">
