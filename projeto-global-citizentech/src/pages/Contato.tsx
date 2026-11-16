@@ -78,12 +78,12 @@ function Contato() {
         {/* .contato-intro */}
         <section className="mb-8 text-left">
           <span className="mb-2 block text-[0.84rem] font-semibold text-[var(--color-leaf)]">
-            Fale com a SoulDevs
+            Fale com a equipe CitizenTech
           </span>
           <h1 className="mt-0 mb-3">Entre em contato</h1>
           <p className="m-0 leading-relaxed text-[var(--color-muted)]">
             Escolha um dos nossos canais ou envie uma mensagem pelo formulário. Este espaço foi criado
-            para aproximar visitantes do projeto da equipe responsável pelo desenvolvimento do SoulUp.
+            para aproximar visitantes do projeto da equipe responsável pelo desenvolvimento do CitizenTech.
           </p>
         </section>
 
@@ -139,8 +139,8 @@ function Contato() {
               <p className={textoContato}>
                 <b>E-mail</b>
                 <br />
-                <a href="mailto:contato@soulup.eco" className={linkContato}>
-                  contato@soulup.eco
+                <a href="mailto:contato@citizentech" className={linkContato}>
+                  contato@citizentech
                 </a>
               </p>
             </div>
@@ -163,12 +163,12 @@ function Contato() {
                 <b>Instagram</b>
                 <br />
                 <a
-                  href="https://instagram.com/soulup.eco"
+                  href="https://instagram.com/citizentech.projeto"
                   target="_blank"
                   rel="noreferrer"
                   className={linkContato}
                 >
-                  @soulup.eco
+                  @citizentech.projeto
                 </a>
               </p>
             </div>
@@ -185,7 +185,7 @@ function Contato() {
               <h2 className="mt-0 mb-1">Formulário de contato</h2>
               <p className="m-0 mb-2 text-[0.88rem] leading-relaxed text-[var(--color-muted)]">
                 Preencha os campos abaixo para enviar dúvidas, sugestões, feedbacks ou comentários sobre o
-                ECO Mobility SoulUp. Sua mensagem ajuda a equipe a receber opiniões sobre a proposta e sua
+                CitizenTech. Sua mensagem ajuda a equipe a receber opiniões sobre a proposta e sua
                 apresentação.
               </p>
 
@@ -282,7 +282,7 @@ function Contato() {
       </main>
 
       <footer className="w-full bg-[#231b54] px-10 py-6 text-white [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:py-5 text-center text-[0.84rem]">
-        <p className="m-0">&copy; Todos os direitos reservados — ECO Mobility SoulUp — 2026</p>
+        <p className="m-0">&copy; Todos os direitos reservados — CitizenTech — 2026</p>
       </footer>
     </>
   )
