@@ -35,13 +35,32 @@ function Contato() {
     defaultValues: { nome: '', email: '', mensagem: '' },
   })
 
-  const onSubmit: SubmitHandler<FormularioContato> = async (dados) => {
-    // Simula o envio. Quando existir endpoint, troque por um fetch/POST aqui.
-    await new Promise((resolve) => setTimeout(resolve, 600))
 
-    setEnviadoPara(dados)
-    reset()
+  const onSubmit: SubmitHandler<FormularioContato> = async (dados) => {
+    try {
+      const resposta = await fetch(
+        'https://climacidadao-java.onrender.com/contatos',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dados),
+        }
+      )
+
+      if (!resposta.ok) {
+        throw new Error(`Erro ao enviar mensagem: ${resposta.status}`)
+      }
+
+      setEnviadoPara(dados)
+      reset()
+    } catch (erro) {
+      console.error('Erro ao enviar contato:', erro)
+      alert('Não foi possível enviar a mensagem. Tente novamente.')
+    }
   }
+
 
   return (
     <>
