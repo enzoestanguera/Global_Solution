@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import type { FormEvent } from 'react'
+import CidadesFavoritas from '../components/CidadesFavoritas'
 
 const API_URL =
   import.meta.env.VITE_API_URL ??
@@ -128,8 +129,8 @@ function resumirPrevisao(dados: DadosPrevisao): PrevisaoDiaria[] {
       )
       const maior = probabilidadesValidas.length > 0
         ? probabilidadesValidas.reduce((a, b) =>
-            b.probabilidadeChuva > a.probabilidadeChuva ? b : a,
-          )
+          b.probabilidadeChuva > a.probabilidadeChuva ? b : a,
+        )
         : null
 
       return {
@@ -322,10 +323,9 @@ export default function PainelClimatico() {
   const textoPrincipal = 'text-[#241d5c]'
   const textoSecundario = 'text-[#59627e]'
 
-  async function pesquisarCidade(evento: FormEvent<HTMLFormElement>) {
-    evento.preventDefault()
+  async function consultarClima(cidadeSelecionada: string) {
 
-    const busca = cidade.trim()
+    const busca = cidadeSelecionada.trim()
     if (!busca) {
       setErro('Informe uma cidade ou CEP.')
       return
@@ -455,6 +455,11 @@ export default function PainelClimatico() {
   }
 
   const dias = previsao ? resumirPrevisao(previsao) : []
+
+  function pesquisarCidade(evento: FormEvent<HTMLFormElement>) {
+    evento.preventDefault()
+    void consultarClima(cidade)
+  }
   const orientacao = clima && !carregandoPrevisao
     ? criarOrientacao(clima, previsao)
     : null
@@ -674,6 +679,14 @@ export default function PainelClimatico() {
               </p>
             </section>
           )}
+
+          <CidadesFavoritas
+            onConsultar={(cidadeFavorita) => {
+              setCidade(cidadeFavorita)
+              void consultarClima(cidadeFavorita)
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }}
+          />
         </div>
       </main>
 
