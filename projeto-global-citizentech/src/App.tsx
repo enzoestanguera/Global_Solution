@@ -8,6 +8,7 @@ import Faq from './pages/Faq';
 import Contato from './pages/Contato';
 import NotFound from './pages/NotFound';
 import PainelClimatico from './pages/PainelClimatico'
+import QuemAjudariamos from './pages/QuemAjudariamos';
 
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/integrantes" element={<Integrantes />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/contato" element={<Contato />} />
+        <Route path="/solucao/beneficiados" element={<QuemAjudariamos />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/painel-climatico" element={<PainelClimatico />} />
       </Routes>
