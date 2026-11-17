@@ -1,4 +1,4 @@
-
+import CardIntegrante from '../components/CardIntegrante'
 import alvaroImg from '../assets/img/alvaro.jpg'
 import arthurImg from '../assets/img/arthur.jpg'
 import dhiegoImg from '../assets/img/dhiego.jpg'
@@ -57,8 +57,6 @@ const integrantes: Integrante[] = [
   },
 ]
 
-const linkCard =
-  'rounded-lg border border-[var(--color-line)] bg-[var(--color-paper)] px-3 py-1.5 text-[0.8rem] font-semibold text-[var(--color-ink)] no-underline transition-colors duration-200 hover:border-[var(--color-azure)] hover:text-[var(--color-azure)]'
 
 function Integrantes() {
   return (
@@ -70,6 +68,7 @@ function Integrantes() {
             Equipe CitizenTech
           </span>
           <h1 className="mt-0 mb-3">Integrantes do grupo</h1>
+          <p className="mb-4">Turma: 1TDSPF</p>
           <p className="m-0 leading-relaxed text-[var(--color-muted)]">
             Os cinco estudantes responsáveis por planejar, projetar e desenvolver o CitizenTech.
           </p>
@@ -78,32 +77,7 @@ function Integrantes() {
         {/* .integrantes_container */}
         <div className="grid grid-cols-5 gap-4 max-[900px]:grid-cols-3 max-[640px]:grid-cols-2 max-[420px]:grid-cols-1">
           {integrantes.map((pessoa) => (
-            <article
-              key={pessoa.rm}
-              className="flex flex-col items-center rounded-xl bg-[var(--color-surface)] p-4 text-center shadow-md"
-            >
-              <img
-                src={pessoa.foto}
-                alt={`Foto de ${pessoa.nome}`}
-                className="size-[100px] shrink-0 rounded-full border-2 border-[var(--color-leaf)] object-cover"
-              />
-              <h3 className="mt-3 mb-1 text-[0.95rem] leading-snug text-[var(--color-ink)]">
-                {pessoa.nome}
-              </h3>
-              <p className="m-0 text-[0.8rem] text-[var(--color-muted)]">RM: {pessoa.rm}</p>
-              <p className="m-0 mt-0.5 text-[0.8rem] font-semibold text-[var(--color-indigo-dark)]">
-                Turma: {pessoa.turma}
-              </p>
-
-              <div className="mt-auto flex flex-wrap justify-center gap-2 pt-4">
-                <a href={pessoa.github} target="_blank" rel="noopener noreferrer" className={linkCard}>
-                  GitHub
-                </a>
-                <a href={pessoa.linkedin} target="_blank" rel="noopener noreferrer" className={linkCard}>
-                  LinkedIn
-                </a>
-              </div>
-            </article>
+            <CardIntegrante key={pessoa.rm} {...pessoa} />
           ))}
         </div>
 
