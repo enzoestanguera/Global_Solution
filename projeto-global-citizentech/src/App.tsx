@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Cabecalho from './components/Cabecalho';
+import Rodape from './components/Rodape';
 import Home from './pages/Home';
 import Sobre from './pages/Sobre';
 import Integrantes from './pages/Integrantes';
@@ -23,6 +24,9 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/painel-climatico" element={<PainelClimatico />} />
       </Routes>
+
+      <Rodape />
+
     </>
   );
 }

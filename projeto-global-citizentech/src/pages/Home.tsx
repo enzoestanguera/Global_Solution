@@ -14,20 +14,23 @@ export default function Home() {
 
       <div className="space-y-4 text-justify leading-relaxed">
         <p>
-          Nosso projeto é sobre algo que já existe no mundo, porém nossa ideia é melhorá-lo para que
-          não haja nenhuma margem de erro.
+          Você já planejou um compromisso contando com a previsão do tempo e acabou sendo surpreendido por uma chuva inesperada? 
+          Mudanças nas condições climáticas podem afetar nossos deslocamentos, compromissos e atividades do dia a dia. 
+          Ter acesso a informações meteorológicas de maneira rápida e organizada pode fazer a diferença na hora de planejar a rotina.
         </p>
         <p>
-          Queremos melhorar a previsão do tempo. Você já deve ter visto nos jornais aquela pessoa que
-          aparece falando sobre o clima de determinada região, dizendo para evitar certas áreas em
-          certo horário, ou mesmo ter visto pelos aplicativos de hoje em dia. Porém, você segue as
-          orientações e, no fim, eles erram feio, e isso faz você pegar a maior chuva que já viu, o
-          que acaba te fazendo atrasar para uma reunião importante no trabalho. Acontece com todo
-          mundo.
+          Pensando nisso, desenvolvemos o ClimaCidadão, uma plataforma que facilita o acesso às informações sobre o clima. 
+          Nosso sistema permite pesquisar por cidade ou CEP, consultar temperatura, sensação térmica, umidade, velocidade do vento 
+          e acompanhar a previsão dos próximos dias. Além disso, oferece orientações úteis de acordo com as condições meteorológicas 
+          apresentadas.
+
+          Para tornar a experiência ainda mais prática, o usuário pode cadastrar suas cidades favoritas, visualizar os locais salvos 
+          e consultar o clima de qualquer um deles com apenas um clique.
         </p>
         <p>
-          Com o nosso projeto, queremos evitar essas situações: usaremos dados espaciais, capturados
-          por satélites, para aprimorar a precisão das previsões do clima.
+          O projeto integra um frontend desenvolvido em React com uma API REST em Java e Spring Boot, utilizando dados meteorológicos 
+          do OpenWeatherMap e o banco de dados Oracle para armazenar informações. Com isso, buscamos oferecer uma solução acessível, 
+          intuitiva e funcional, que ajude os cidadãos a se informarem e planejarem melhor suas atividades diárias.
         </p>
       </div>
 

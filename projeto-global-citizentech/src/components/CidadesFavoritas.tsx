@@ -74,15 +74,44 @@ export default function CidadesFavoritas({ onConsultar }: Props) {
     async function adicionarFavorito(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault()
 
-        const cidadeInformada = cidade.trim()
+        let cidadeInformada = cidade.trim()
         if (!cidadeInformada) return
 
         setSalvando(true)
         setErro('')
         setSucesso('')
 
+        
         try {
-            const resposta = await fetch(URL_FAVORITOS, {
+        // Se o usuário digitou um CEP, consulta o ViaCEP.
+        if (/^[\d.\s-]+$/.test(cidadeInformada)) {
+            const cep = cidadeInformada.replace(/\D/g, '')
+
+            if (cep.length !== 8) {
+            throw new Error('Informe um CEP válido com 8 números.')
+            }
+
+            const consultaCep = await fetch(
+            `https://viacep.com.br/ws/${cep}/json/`
+            )
+
+            if (!consultaCep.ok) {
+            throw new Error('Não foi possível consultar o CEP.')
+            }
+
+            const dadosCep = (await consultaCep.json()) as {
+            localidade?: string
+            erro?: boolean
+            }
+
+            if (dadosCep.erro || !dadosCep.localidade) {
+            throw new Error('CEP não encontrado.')
+            }
+
+            cidadeInformada = dadosCep.localidade
+        }
+
+        const resposta = await fetch(URL_FAVORITOS, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -188,7 +217,7 @@ export default function CidadesFavoritas({ onConsultar }: Props) {
                     id="cidade-favorita"
                     type="text"
                     maxLength={100}
-                    placeholder="Ex.: São Paulo"
+                    placeholder="Ex.: São Paulo ou 01310-100"
                     value={cidade}
                     onChange={(evento) => setCidade(evento.target.value)}
                     className="w-full rounded-lg border border-[#cbd5f3] bg-[#f2f5ff] p-3 focus:outline-none focus:ring-2 focus:ring-[#a5b4fc]"

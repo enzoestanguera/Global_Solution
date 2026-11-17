@@ -24,6 +24,16 @@ export function Cabecalho() {
           <li className="flex items-center gap-1.5">
             <span className="text-[10px] text-white/60">•</span>
             <Link
+              to="/"
+              className="font-['Inter',sans-serif] text-xs font-medium text-white no-underline transition-opacity duration-200 hover:opacity-80"
+            >
+              Início
+            </Link>
+          </li>
+
+          <li className="flex items-center gap-1.5">
+            <span className="text-[10px] text-white/60">•</span>
+            <Link
               to="/painel-climatico"
               className="font-['Inter',sans-serif] text-xs font-medium text-white no-underline transition-opacity duration-200 hover:opacity-80"
             >
