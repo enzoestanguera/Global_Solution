@@ -1,13 +1,10 @@
 import { useRef, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { ChangeEvent, FormEvent } from 'react'
 import CidadesFavoritas from '../components/CidadesFavoritas'
 
 const API_URL =
   import.meta.env.VITE_API_URL ??
   'https://climacidadao-java.onrender.com'
-
-// Evita consultar novamente os mesmos dados a cada pesquisa repetida.
-const TEMPO_CACHE = 10 * 60 * 1000 // 10 minutos
 
 type Clima = {
   cidade: string
@@ -37,16 +34,6 @@ type PrevisaoDiaria = {
   minima: number
   maxima: number
   descricao: string
-  maiorProbabilidade: number | null
-  horarioMaiorProbabilidade: number | null
-  horarioReferencia: number
-  indicaChuva: boolean
-}
-
-type ResultadoEmCache = {
-  salvoEm: number
-  clima: Clima
-  previsao: DadosPrevisao
 }
 
 function formatar(valor: number, casas = 1) {
@@ -54,11 +41,6 @@ function formatar(valor: number, casas = 1) {
     minimumFractionDigits: casas,
     maximumFractionDigits: casas,
   })
-}
-
-function horaLocal(horarioUtc: number, fusoHorarioSegundos: number) {
-  const data = new Date((horarioUtc + fusoHorarioSegundos) * 1000)
-  return `${String(data.getUTCHours()).padStart(2, '0')}h`
 }
 
 function nomeDoDia(data: string, fusoHorarioSegundos: number) {
@@ -79,104 +61,48 @@ function nomeDoDia(data: string, fusoHorarioSegundos: number) {
   }).format(new Date(`${data}T12:00:00Z`))
 }
 
-// A previsao vem a cada 3 horas. O resumo mostra a condicao proxima
-// do meio-dia e, SEPARADAMENTE, a maior probabilidade em um intervalo
-// disponivel. Nunca apresentamos essa maxima como chance do dia inteiro.
-function mencionaChuva(descricao: string) {
-  return /chuva|garoa|chuvisco|tempestade|trovoada|pancadas/i.test(descricao)
-}
-
+// Agrupa a previsão de 3 em 3 horas em até cinco dias.
+// Para cada dia, calcula mínima/máxima e escolhe a descrição
+// do horário mais próximo do meio-dia local.
 function resumirPrevisao(dados: DadosPrevisao): PrevisaoDiaria[] {
   const grupos = new Map<string, Previsao[]>()
 
   for (const item of dados.previsoes) {
-    const dataLocal = new Date(
+    const data = new Date(
       (item.horarioUtc + dados.fusoHorarioSegundos) * 1000,
-    )
-    const data = dataLocal.toISOString().slice(0, 10)
-    const lista = grupos.get(data) ?? []
-    lista.push(item)
-    grupos.set(data, lista)
+    ).toISOString().slice(0, 10)
+    const itens = grupos.get(data) ?? []
+    itens.push(item)
+    grupos.set(data, itens)
+  }
+
+  function horaLocal(item: Previsao) {
+    return new Date(
+      (item.horarioUtc + dados.fusoHorarioSegundos) * 1000,
+    ).getUTCHours()
   }
 
   return Array.from(grupos.entries())
     .sort(([a], [b]) => a.localeCompare(b))
     .slice(0, 5)
     .map(([data, itens]) => {
-      const hora = (item: Previsao) =>
-        new Date(
-          (item.horarioUtc + dados.fusoHorarioSegundos) * 1000,
-        ).getUTCHours()
-
-      const periodosDiurnos = itens.filter(
-        (item) => hora(item) >= 9 && hora(item) <= 18,
-      )
-      const candidatos = periodosDiurnos.length > 0 ? periodosDiurnos : itens
-
-      const referencia = candidatos.reduce((melhor, item) =>
-        Math.abs(hora(item) - 12) < Math.abs(hora(melhor) - 12)
+      const referencia = itens.reduce((melhor, item) =>
+        Math.abs(horaLocal(item) - 12) < Math.abs(horaLocal(melhor) - 12)
           ? item
           : melhor,
       )
-
-      // Não converte valor ausente/inválido em 0% no React.
-      const probabilidadesValidas = itens.filter(
-        (item) =>
-          typeof item.probabilidadeChuva === 'number' &&
-          Number.isFinite(item.probabilidadeChuva) &&
-          item.probabilidadeChuva >= 0 &&
-          item.probabilidadeChuva <= 100,
-      )
-      const maior = probabilidadesValidas.length > 0
-        ? probabilidadesValidas.reduce((a, b) =>
-          b.probabilidadeChuva > a.probabilidadeChuva ? b : a,
-        )
-        : null
 
       return {
         data,
         minima: Math.min(...itens.map((item) => item.temperatura)),
         maxima: Math.max(...itens.map((item) => item.temperatura)),
         descricao: referencia.descricao,
-        horarioReferencia: referencia.horarioUtc,
-        maiorProbabilidade: maior?.probabilidadeChuva ?? null,
-        horarioMaiorProbabilidade: maior?.horarioUtc ?? null,
-        indicaChuva: itens.some((item) => mencionaChuva(item.descricao)),
       }
     })
 }
 
-function lerCache(chave: string): ResultadoEmCache | null {
-  try {
-    const salvo = sessionStorage.getItem(chave)
-    if (!salvo) return null
-
-    const resultado = JSON.parse(salvo) as ResultadoEmCache
-    if (
-      !resultado.clima ||
-      !resultado.previsao ||
-      !Array.isArray(resultado.previsao.previsoes) ||
-      Date.now() - resultado.salvoEm > TEMPO_CACHE
-    ) {
-      sessionStorage.removeItem(chave)
-      return null
-    }
-
-    return resultado
-  } catch {
-    return null
-  }
-}
-
-function salvarCache(chave: string, clima: Clima, previsao: DadosPrevisao) {
-  try {
-    sessionStorage.setItem(
-      chave,
-      JSON.stringify({ salvoEm: Date.now(), clima, previsao }),
-    )
-  } catch {
-    // O painel funciona mesmo quando o navegador bloqueia o armazenamento.
-  }
+function mencionaChuva(descricao: string) {
+  return /chuva|garoa|chuvisco|tempestade|trovoada|pancadas/i.test(descricao)
 }
 
 type Orientacao = {
@@ -185,118 +111,58 @@ type Orientacao = {
   simbolo: string
 }
 
-// Mensagens informativas: dados atuais e previsao das proximas 12 horas.
-// Condicoes no momento e previstas para horarios futuros sao diferentes.
-// Nao sao alertas oficiais ou recomendacoes para permanecer em casa.
-function criarOrientacao(
-  clima: Clima,
-  previsao: DadosPrevisao | null,
-): Orientacao {
+// Conselhos informativos com base no clima atual e nas próximas 12 horas.
+function criarOrientacao(clima: Clima, previsao: DadosPrevisao | null): Orientacao {
   const agora = Date.now() / 1000
   const proximasHoras = (previsao?.previsoes ?? []).filter(
     (item) => item.horarioUtc >= agora && item.horarioUtc <= agora + 12 * 3600,
   )
 
-  const possibilidades = proximasHoras
-    .map((item) => item.probabilidadeChuva)
-    .filter((valor) =>
-      typeof valor === 'number' &&
-      Number.isFinite(valor) &&
-      valor >= 0 &&
-      valor <= 100,
-    )
-  const maiorChance = possibilidades.length > 0
-    ? Math.max(...possibilidades)
-    : null
-
-  const ventoMaisForte = Math.max(
-    clima.vento,
-    ...proximasHoras.map((item) => item.vento),
-  )
-  const maiorCalor = Math.max(
-    clima.temperatura,
-    clima.sensacaoTermica,
-    ...proximasHoras.map((item) => item.temperatura),
-  )
-
+  const tempestade = /chuva forte|tempestade|trovoada/i
+  const temTempestade = tempestade.test(clima.descricao) ||
+    proximasHoras.some((item) => tempestade.test(item.descricao))
   const chuvaAgora = mencionaChuva(clima.descricao)
-  const intensidade = /chuva forte|tempestade|trovoada/i
-  const tempestadeAgora = intensidade.test(clima.descricao)
-  const tempestadePrevista = proximasHoras.some((item) =>
-    intensidade.test(item.descricao),
+  const chuvaPrevista = proximasHoras.some((item) => mencionaChuva(item.descricao))
+  const chuvaProvavel = proximasHoras.some(
+    (item) => Number.isFinite(item.probabilidadeChuva) &&
+      item.probabilidadeChuva >= 70 && item.probabilidadeChuva <= 100,
   )
-  const chuvaPrevista = proximasHoras.some((item) =>
-    mencionaChuva(item.descricao),
-  )
+  const ventoForte = clima.vento >= 10 || proximasHoras.some((item) => item.vento >= 10)
+  const calorForte = Math.max(clima.temperatura, clima.sensacaoTermica) >= 35 ||
+    proximasHoras.some((item) => item.temperatura >= 35)
 
-  if (tempestadeAgora) {
+  if (temTempestade) {
     return {
       simbolo: '⛈️',
-      titulo: 'Atenção às condições neste momento',
-      mensagem: `Em ${clima.cidade}, a condição informada agora é ${clima.descricao}. Se houver chuva intensa ou trovoadas, procure um local protegido, evite áreas alagadas e acompanhe os avisos oficiais antes de sair.`,
+      titulo: 'Atenção à possibilidade de tempestade',
+      mensagem: 'Há indicação de condições intensas agora ou nas próximas 12 horas. Evite áreas alagadas e acompanhe os avisos oficiais.',
     }
   }
-
-  if (tempestadePrevista) {
-    return {
-      simbolo: '⛈️',
-      titulo: 'Acompanhe a possibilidade de tempestade',
-      mensagem: `A previsão para ${clima.cidade} indica condições de tempestade ou trovoadas em algum momento das próximas 12 horas. Planeje seus deslocamentos e acompanhe os avisos oficiais. Se houver chuva intensa, evite áreas alagadas.`,
-    }
-  }
-
-  if (chuvaAgora) {
-    return {
-      simbolo: '🌧️',
-      titulo: 'Está chovendo na região consultada',
-      mensagem: `A condição informada agora em ${clima.cidade} é ${clima.descricao}. Se for sair, leve proteção para a chuva e tenha cuidado com pisos escorregadios e pontos de alagamento.`,
-    }
-  }
-
-  if (maiorChance !== null && maiorChance >= 70) {
+  if (chuvaAgora || chuvaPrevista || chuvaProvavel) {
     return {
       simbolo: '☔',
-      titulo: 'Prepare-se para uma possível chuva',
-      mensagem: `Em ${clima.cidade}, a probabilidade de precipitação chega a ${formatar(maiorChance, 0)}% em pelo menos um intervalo das próximas 12 horas. Isso não significa que vai chover durante todo o dia. Considere levar um guarda-chuva e confira a previsão antes de sair.`,
+      titulo: 'Prepare-se para a possibilidade de chuva',
+      mensagem: 'Os dados atuais ou das próximas 12 horas indicam chuva ou chance elevada de precipitação em algum horário. Considere levar um guarda-chuva.',
     }
   }
-
-  if (chuvaPrevista) {
-    return {
-      simbolo: '☁️',
-      titulo: 'Há indicação de chuva em alguns horários',
-      mensagem: `A previsão para ${clima.cidade} menciona chuva em algum período das próximas 12 horas. Mesmo que a probabilidade informada seja baixa, vale levar proteção caso vá passar muito tempo ao ar livre.`,
-    }
-  }
-
-  if (ventoMaisForte >= 10) {
+  if (ventoForte) {
     return {
       simbolo: '💨',
       titulo: 'Atenção ao vento',
-      mensagem: `Em ${clima.cidade}, o vento informado chega a ${formatar(ventoMaisForte * 3.6, 0)} km/h agora ou nas próximas 12 horas. Cuidado com objetos soltos e com estruturas instáveis durante ventanias.`,
+      mensagem: 'Há indicação de vento de pelo menos 36 km/h agora ou nas próximas 12 horas. Tenha cuidado com objetos soltos.',
     }
   }
-
-  if (maiorCalor >= 35) {
+  if (calorForte) {
     return {
       simbolo: '☀️',
       titulo: 'Cuide-se durante o calor',
-      mensagem: `Em ${clima.cidade}, a temperatura ou sensação térmica chega a ${formatar(maiorCalor, 0)} °C nos dados consultados. Beba água regularmente e procure evitar esforço intenso sob sol forte.`,
+      mensagem: 'Temperatura ou sensação térmica de pelo menos 35 °C nos dados consultados. Beba água e evite esforço intenso sob sol forte.',
     }
   }
-
-  if (!previsao || proximasHoras.length === 0) {
-    return {
-      simbolo: '🌤️',
-      titulo: 'Confira o tempo antes de sair',
-      mensagem: `Em ${clima.cidade}, a condição atual informada é ${clima.descricao}, com ${formatar(clima.temperatura)} °C. Não há previsão suficiente das próximas horas disponível para uma orientação mais específica.`,
-    }
-  }
-
   return {
     simbolo: '🌤️',
-    titulo: 'Confira a previsão ao longo do dia',
-    mensagem: `Em ${clima.cidade}, os dados disponíveis das próximas 12 horas não atingiram os critérios de atenção definidos pelo CitizenTech para chuva, vento ou calor. Isso não elimina a possibilidade de mudanças no tempo.`,
+    titulo: 'Confira o tempo antes de sair',
+    mensagem: `Condição atual em ${clima.cidade}: ${clima.descricao}, ${formatar(clima.temperatura)} °C. O tempo pode mudar; acompanhe as atualizações.`,
   }
 }
 
@@ -323,14 +189,15 @@ export default function PainelClimatico() {
   const textoPrincipal = 'text-[#241d5c]'
   const textoSecundario = 'text-[#59627e]'
 
+  // Uma única função atende à pesquisa manual e ao botão "Ver clima".
   async function consultarClima(cidadeSelecionada: string) {
-
     const busca = cidadeSelecionada.trim()
     if (!busca) {
       setErro('Informe uma cidade ou CEP.')
       return
     }
 
+    // Evita que uma pesquisa antiga substitua o resultado da mais recente.
     const pesquisaAtual = ++numeroPesquisa.current
     setCarregando(true)
     setCarregandoPrevisao(false)
@@ -339,113 +206,51 @@ export default function PainelClimatico() {
     setPrevisao(null)
 
     try {
-      // Mesmo CEP ou cidade consultados na sessão: exibição imediata.
-      const chaveBusca = `citizentech:v2:clima:${busca.toLowerCase()}`
-      const cacheBusca = lerCache(chaveBusca)
-      if (cacheBusca) {
-        setClima(cacheBusca.clima)
-        setPrevisao(cacheBusca.previsao)
-        return
-      }
-
       let cidadeParaConsultar = busca
 
-      // Mantém a pesquisa por CEP com o ViaCEP.
+      // Converte CEP em nome de cidade antes de consultar o Java.
       if (/^[\d-]+$/.test(busca)) {
         const cep = busca.replace(/\D/g, '')
-
-        if (cep.length !== 8) {
-          throw new Error('O CEP deve conter 8 números.')
-        }
+        if (cep.length !== 8) throw new Error('O CEP deve conter 8 números.')
 
         const respostaCep = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
-
-        if (!respostaCep.ok) {
-          throw new Error('Não foi possível consultar o CEP.')
-        }
+        if (!respostaCep.ok) throw new Error('Não foi possível consultar o CEP.')
 
         const endereco = (await respostaCep.json()) as {
           localidade?: string
-          uf?: string
           erro?: boolean
         }
-
         if (endereco.erro || !endereco.localidade) {
           throw new Error('CEP não encontrado.')
         }
-
         cidadeParaConsultar = `${endereco.localidade},BR`
       }
 
       if (pesquisaAtual !== numeroPesquisa.current) return
-
-      const chave = `citizentech:v2:clima:${cidadeParaConsultar.toLowerCase()}`
-      const emCache = lerCache(chave)
-
-      // Pesquisas repetidas aparecem imediatamente, sem novas chamadas à API.
-      if (emCache) {
-        setClima(emCache.clima)
-        setPrevisao(emCache.previsao)
-        return
-      }
-
       const parametro = encodeURIComponent(cidadeParaConsultar)
+
+      // Etapa 1: consulta o clima atual.
+      const respostaClima = await fetch(`${API_URL}/clima?cidade=${parametro}`)
+      if (!respostaClima.ok) throw new Error('Não foi possível consultar o clima atual.')
+
+      const dadosClima = (await respostaClima.json()) as Clima
+      if (pesquisaAtual !== numeroPesquisa.current) return
+      setClima(dadosClima)
+      setCarregando(false)
       setCarregandoPrevisao(true)
 
-      // As duas requisições ocorrem em paralelo. O clima atual aparece
-      // assim que chegar, sem esperar a previsão de cinco dias.
-      const tarefaClima = fetch(`${API_URL}/clima?cidade=${parametro}`)
-        .then(async (resposta) => {
-          if (!resposta.ok) throw new Error('Clima atual indisponível.')
-          return (await resposta.json()) as Clima
-        })
-        .then((dados) => {
-          if (pesquisaAtual === numeroPesquisa.current) {
-            setClima(dados)
-            setCarregando(false)
-          }
-          return dados
-        })
-
-      const tarefaPrevisao = fetch(`${API_URL}/clima/previsao?cidade=${parametro}`)
-        .then(async (resposta) => {
-          if (!resposta.ok) throw new Error('Previsão indisponível.')
-          return (await resposta.json()) as DadosPrevisao
-        })
-        .then((dados) => {
-          if (pesquisaAtual === numeroPesquisa.current) {
-            setPrevisao(dados)
-            setCarregandoPrevisao(false)
-          }
-          return dados
-        })
-
-      const [resultadoClima, resultadoPrevisao] = await Promise.allSettled([
-        tarefaClima,
-        tarefaPrevisao,
-      ])
-
-      if (pesquisaAtual !== numeroPesquisa.current) return
-
-      if (resultadoClima.status === 'fulfilled' && resultadoPrevisao.status === 'fulfilled') {
-        salvarCache(chave, resultadoClima.value, resultadoPrevisao.value)
-        if (chaveBusca !== chave) {
-          salvarCache(chaveBusca, resultadoClima.value, resultadoPrevisao.value)
-        }
-      } else if (resultadoClima.status === 'rejected' && resultadoPrevisao.status === 'rejected') {
-        setErro('Não foi possível consultar o clima. Tente novamente em instantes.')
-      } else if (resultadoClima.status === 'rejected') {
-        setErro('O clima atual não carregou, mas a previsão está disponível.')
-      } else {
-        setErro('O clima atual carregou, mas a previsão de cinco dias está indisponível.')
+      // Etapa 2: consulta a previsão. O clima atual já pode ser mostrado.
+      const respostaPrevisao = await fetch(`${API_URL}/clima/previsao?cidade=${parametro}`)
+      if (!respostaPrevisao.ok) {
+        throw new Error('O clima atual carregou, mas a previsão está indisponível.')
       }
-    } catch (error) {
+
+      const dadosPrevisao = (await respostaPrevisao.json()) as DadosPrevisao
       if (pesquisaAtual !== numeroPesquisa.current) return
-      setErro(
-        error instanceof Error
-          ? error.message
-          : 'Não foi possível realizar a pesquisa.',
-      )
+      setPrevisao(dadosPrevisao)
+    } catch (falha) {
+      if (pesquisaAtual !== numeroPesquisa.current) return
+      setErro(falha instanceof Error ? falha.message : 'Não foi possível realizar a pesquisa.')
     } finally {
       if (pesquisaAtual === numeroPesquisa.current) {
         setCarregando(false)
@@ -454,12 +259,12 @@ export default function PainelClimatico() {
     }
   }
 
-  const dias = previsao ? resumirPrevisao(previsao) : []
-
   function pesquisarCidade(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault()
     void consultarClima(cidade)
   }
+
+  const dias = previsao ? resumirPrevisao(previsao) : []
   const orientacao = clima && !carregandoPrevisao
     ? criarOrientacao(clima, previsao)
     : null
@@ -495,7 +300,7 @@ export default function PainelClimatico() {
                 className={campo}
                 placeholder="Ex.: Campinas,BR ou 13010-111"
                 value={cidade}
-                onChange={(evento) => setCidade(evento.target.value)}
+                onChange={(evento: ChangeEvent<HTMLInputElement>) => setCidade(evento.target.value)}
                 required
               />
               <button
@@ -592,55 +397,36 @@ export default function PainelClimatico() {
                 Previsão para os próximos 5 dias
               </h2>
               <p className={`mb-6 text-sm ${textoSecundario}`}>
-                Um resumo por dia, com a condição próxima do meio-dia e a maior
-                chance de precipitação entre os horários disponíveis.
+                Temperaturas mínima e máxima aproximadas e condições previstas
+                para cada dia.
               </p>
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-                {dias.map((dia) => {
-                  const horario = horaLocal(
-                    dia.horarioReferencia,
-                    previsao.fusoHorarioSegundos,
-                  )
-                  return (
-                    <article key={dia.data} className={cartaoInterno}>
-                      <h3 className={`mb-1 font-bold capitalize ${textoPrincipal}`}>
-                        {nomeDoDia(dia.data, previsao.fusoHorarioSegundos)}
-                      </h3>
-                      <p className={`mb-4 text-xs ${textoSecundario}`}>
-                        {dia.data.slice(8, 10)}/{dia.data.slice(5, 7)}
-                      </p>
-                      <p className={`mb-2 text-2xl font-bold ${textoPrincipal}`}>
-                        {formatar(dia.maxima, 0)} °C
-                      </p>
-                      <p className={`mb-4 text-sm ${textoSecundario}`}>
-                        Mínima: {formatar(dia.minima, 0)} °C
-                      </p>
-                      <p className={`mb-2 text-sm capitalize ${textoPrincipal}`}>
-                        {dia.descricao}
-                      </p>
-                      <p className={`mb-3 text-xs ${textoSecundario}`}>
-                        Condição prevista às {horario}
-                      </p>
-                      <p className={`text-sm ${textoSecundario}`}>
-                        {dia.maiorProbabilidade === null
-                          ? 'Chance de precipitação não informada'
-                          : dia.maiorProbabilidade === 0 && dia.indicaChuva
-                            ? 'Há chuva indicada em alguns horários; confira a previsão atualizada.'
-                            : dia.maiorProbabilidade === 0
-                              ? 'Sem precipitação indicada nos horários disponíveis'
-                              : `Maior chance de precipitação: ${formatar(dia.maiorProbabilidade, 0)}% às ${horaLocal(dia.horarioMaiorProbabilidade!, previsao.fusoHorarioSegundos)}`}
-                      </p>
-                    </article>
-                  )
-                })}
+                {dias.map((dia) => (
+                  <article key={dia.data} className={cartaoInterno}>
+                    <h3 className={`mb-1 font-bold capitalize ${textoPrincipal}`}>
+                      {nomeDoDia(dia.data, previsao.fusoHorarioSegundos)}
+                    </h3>
+                    <p className={`mb-4 text-xs ${textoSecundario}`}>
+                      {dia.data.slice(8, 10)}/{dia.data.slice(5, 7)}
+                    </p>
+                    <p className={`mb-2 text-2xl font-bold ${textoPrincipal}`}>
+                      {formatar(dia.maxima, 0)} °C
+                    </p>
+                    <p className={`mb-4 text-sm ${textoSecundario}`}>
+                      Mínima: {formatar(dia.minima, 0)} °C
+                    </p>
+                    <p className={`text-sm capitalize ${textoPrincipal}`}>
+                      {dia.descricao}
+                    </p>
+                  </article>
+                ))}
               </div>
 
               <p className={`mt-6 text-center text-xs ${textoSecundario}`}>
-                Fonte: OpenWeatherMap. Mínimas e máximas aproximadas a partir
-                das previsões disponíveis a cada 3 horas. A maior chance de
-                precipitação refere-se a um único intervalo, não à probabilidade
-                de chuva do dia inteiro. Hoje pode ter menos horários disponíveis.
+                Fonte: OpenWeatherMap. Mínimas e máximas calculadas a partir
+                dos horários disponíveis; a descrição representa a condição
+                prevista mais próxima do meio-dia.
               </p>
             </section>
           )}
@@ -662,12 +448,9 @@ export default function PainelClimatico() {
               </div>
 
               <p className={`mt-4 text-xs ${textoSecundario}`}>
-                Orientação informativa baseada nos dados do OpenWeatherMap e
-                nos critérios do CitizenTech (chuva prevista ou chance a partir
-                de 70% em algum intervalo, temperatura ou sensação térmica a
-                partir de 35 °C, vento a partir de 36 km/h). Não é um alerta
-                oficial e não garante
-                ausência de riscos. Para avisos oficiais, consulte{' '}
+                Orientação informativa baseada no clima e na previsão das próximas
+                12 horas. Não é um alerta oficial e não garante ausência de riscos.
+                Para avisos oficiais, consulte{' '}
                 <a
                   href="https://avisos.inmet.gov.br/"
                   target="_blank"
@@ -679,7 +462,6 @@ export default function PainelClimatico() {
               </p>
             </section>
           )}
-
           <CidadesFavoritas
             onConsultar={(cidadeFavorita) => {
               setCidade(cidadeFavorita)
@@ -689,7 +471,7 @@ export default function PainelClimatico() {
           />
         </div>
       </main>
-      
+
     </>
   )
 }
