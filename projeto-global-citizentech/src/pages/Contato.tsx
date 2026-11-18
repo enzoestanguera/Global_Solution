@@ -78,12 +78,12 @@ function Contato() {
         {/* .contato-intro */}
         <section className="mb-8 text-left">
           <span className="mb-2 block text-[0.84rem] font-semibold text-[var(--color-leaf)]">
-            Fale com a equipe CitizenTech
+            Fale com a equipe ClimateSafe
           </span>
           <h1 className="mt-0 mb-3">Entre em contato</h1>
           <p className="m-0 leading-relaxed text-[var(--color-muted)]">
             Escolha um dos nossos canais ou envie uma mensagem pelo formulário. Este espaço foi criado
-            para aproximar visitantes do projeto da equipe responsável pelo desenvolvimento do CitizenTech.
+            para aproximar visitantes do projeto da equipe responsável pelo desenvolvimento do ClimateSafe.
           </p>
         </section>
 
@@ -139,8 +139,8 @@ function Contato() {
               <p className={textoContato}>
                 <b>E-mail</b>
                 <br />
-                <a href="mailto:contato@citizentech" className={linkContato}>
-                  contato@citizentech
+                <a href="mailto:contato@ClimateSafe" className={linkContato}>
+                  contato@ClimateSafe
                 </a>
               </p>
             </div>
@@ -163,12 +163,12 @@ function Contato() {
                 <b>Instagram</b>
                 <br />
                 <a
-                  href="https://instagram.com/citizentech.projeto"
+                  href="https://instagram.com/ClimateSafe.projeto"
                   target="_blank"
                   rel="noreferrer"
                   className={linkContato}
                 >
-                  @citizentech.projeto
+                  @ClimateSafe.projeto
                 </a>
               </p>
             </div>
@@ -185,7 +185,7 @@ function Contato() {
               <h2 className="mt-0 mb-1">Formulário de contato</h2>
               <p className="m-0 mb-2 text-[0.88rem] leading-relaxed text-[var(--color-muted)]">
                 Preencha os campos abaixo para enviar dúvidas, sugestões, feedbacks ou comentários sobre o
-                CitizenTech. Sua mensagem ajuda a equipe a receber opiniões sobre a proposta e sua
+                ClimateSafe. Sua mensagem ajuda a equipe a receber opiniões sobre a proposta e sua
                 apresentação.
               </p>
 
