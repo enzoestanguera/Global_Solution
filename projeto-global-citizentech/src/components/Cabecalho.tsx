@@ -1,5 +1,5 @@
-
 import { Link } from 'react-router-dom'
+import logoFtImg from '../assets/img/logo_ft.jpg' 
 
 export function Cabecalho() {
   return (
@@ -10,10 +10,10 @@ export function Cabecalho() {
         className="flex items-center no-underline"
       >
         <img
-          src="/src/assets/img/logo_ft.jpg"
+          src={logoFtImg}
           alt="Logo"
           className="h-16 w-auto shrink-0 object-contain"
-          />
+        />
       </Link>
 
       {/* Menu de navegação */}
