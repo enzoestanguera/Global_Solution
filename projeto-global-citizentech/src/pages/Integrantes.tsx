@@ -61,21 +61,21 @@ const integrantes: Integrante[] = [
 function Integrantes() {
   return (
     <>
-      <main className="mx-auto w-full max-w-[1000px] px-4 py-12">
+      <main className="mx-auto w-full max-w-[1200px] px-4 py-12">
         {/* .integrantes-hero */}
         <section className="mb-8 max-w-[720px] text-left">
           <span className="mb-2 block text-[0.84rem] font-semibold text-[var(--color-leaf)]">
-            Equipe CitizenTech
+            Equipe ClimateSafe
           </span>
           <h1 className="mt-0 mb-3">Integrantes do grupo</h1>
           <p className="mb-4">Turma: 1TDSPF</p>
           <p className="m-0 leading-relaxed text-[var(--color-muted)]">
-            Os cinco estudantes responsáveis por planejar, projetar e desenvolver o CitizenTech.
+            Os cinco estudantes responsáveis por planejar, projetar e desenvolver o ClimateSafe.
           </p>
         </section>
 
         {/* .integrantes_container */}
-       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="flex flex-wrap justify-center gap-6">
           {integrantes.map((pessoa) => (
             <CardIntegrante key={pessoa.rm} {...pessoa} />
           ))}
@@ -85,7 +85,7 @@ function Integrantes() {
         <section className="mx-auto mt-8 w-full max-w-[720px] rounded-2xl border-t-4 border-t-[var(--color-leaf)] bg-[var(--color-surface)] p-6 shadow-md sm:p-8">
           <h2 className="mt-0 mb-2">Sobre nós</h2>
           <p className="m-0 text-[0.9rem] leading-relaxed text-[var(--color-muted)]">
-            Somos os integrantes da equipe CitizenTech e trabalhamos juntos no desenvolvimento
+            Somos os integrantes da equipe ClimateSafe e trabalhamos juntos no desenvolvimento
             de uma proposta voltada à informação e orientação climática, unindo programação,
             organização e criatividade para ajudar os cidadãos a compreender melhor os riscos
             relacionados às condições meteorológicas.
