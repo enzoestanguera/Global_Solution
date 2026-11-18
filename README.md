@@ -9,9 +9,11 @@ A ideia desenvolvida neste projeto é de nós ajudarmos as pessoas com informaç
 
 No projeto utilizamos mais HTML, TAILWIND, REACT, VITE e TYPESCRIPT.
 
-Nas pastas, temos a src que contém todo o conteúdo, a assets, contendo a pasta img, com as imagens, a pasta components com o cabeçalho do site e a pasta pages, onde ficam todas as páginas do site.
+Nas pastas, temos a src que contém todo o conteúdo, a assets, contendo a pasta img, com as imagens, a pasta components com o cabeçalho do site, rodapé entre outros compenentes e a pasta pages, onde ficam todas as páginas do site.
 
 Para executar esse projeto localmente, abra o terminal git bash no Visual Studio Code, e use o comando npm install para instalar as dependências do projeto, como a pasta node_modules, ainda no git bash, utilize o comando npm install react-hook-form e após isso use o comando npm run dev para executar o código e ver o site.
+
+API no github: https://github.com/arthurarrudaa/climacidadao-java
 
 ======================= Integrantes =======================
 
