@@ -35,7 +35,6 @@ function Contato() {
     defaultValues: { nome: '', email: '', mensagem: '' },
   })
 
-
   const onSubmit: SubmitHandler<FormularioContato> = async (dados) => {
     try {
       const resposta = await fetch(
@@ -71,7 +70,6 @@ function Contato() {
     }
   }
 
-
   return (
     <>
       <main className="mx-auto w-full max-w-[720px] px-4 py-12">
@@ -91,7 +89,7 @@ function Contato() {
         <div className="flex flex-col gap-8">
           {/* .contatos */}
           <section
-            className="grid grid-cols-3 gap-4 max-[760px]:grid-cols-1"
+            className="grid grid-cols-[1fr_1.35fr_1.35fr] gap-4 max-[760px]:grid-cols-1"
             aria-labelledby="meios-contato"
           >
             <h2 id="meios-contato" className="col-span-full m-0 max-[760px]:col-auto">
@@ -280,8 +278,6 @@ function Contato() {
           </section>
         </div>
       </main>
-
-
     </>
   )
 }

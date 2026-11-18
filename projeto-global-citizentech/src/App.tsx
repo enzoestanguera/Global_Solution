@@ -7,9 +7,9 @@ import Integrantes from './pages/Integrantes';
 import Faq from './pages/Faq';
 import Contato from './pages/Contato';
 import NotFound from './pages/NotFound';
-import PainelClimatico from './pages/PainelClimatico'
+import PainelClimatico from './pages/PainelClimatico';
 import QuemAjudariamos from './pages/QuemAjudariamos';
-
+import ExemploSistemas from './pages/ExemploSistemas';
 
 export default function App() {
   return (
@@ -18,17 +18,17 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/painel-climatico" element={<PainelClimatico />} />
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/integrantes" element={<Integrantes />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/contato" element={<Contato />} />
         <Route path="/solucao/beneficiados" element={<QuemAjudariamos />} />
+        <Route path="/solucao/exemplos" element={<ExemploSistemas />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/painel-climatico" element={<PainelClimatico />} />
       </Routes>
 
       <Rodape />
-
     </>
   );
 }

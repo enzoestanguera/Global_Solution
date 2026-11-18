@@ -6,7 +6,7 @@ export default function Rodape() {
             <div className="mx-auto grid max-w-6xl gap-8 px-6 py-10 md:grid-cols-3">
                 <div>
                     <h2 className="mb-3 text-xl font-bold text-white">
-                        ClimaCidadão
+                        ClimateSafe
                     </h2>
                     <p className="text-sm leading-relaxed text-white/80">
                         Informações meteorológicas, previsão do tempo e

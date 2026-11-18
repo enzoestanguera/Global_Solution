@@ -19,7 +19,7 @@ export default function Home() {
           Ter acesso a informações meteorológicas de maneira rápida e organizada pode fazer a diferença na hora de planejar a rotina.
         </p>
         <p>
-          Pensando nisso, desenvolvemos o ClimaCidadão, uma plataforma que facilita o acesso às informações sobre o clima. 
+          Pensando nisso, desenvolvemos o ClimateSafe, uma plataforma que facilita o acesso às informações sobre o clima. 
           Nosso sistema permite pesquisar por cidade ou CEP, consultar temperatura, sensação térmica, umidade, velocidade do vento 
           e acompanhar a previsão dos próximos dias. Além disso, oferece orientações úteis de acordo com as condições meteorológicas 
           apresentadas.
