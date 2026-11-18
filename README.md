@@ -15,6 +15,8 @@ Para executar esse projeto localmente, abra o terminal git bash no Visual Studio
 
 API no github: https://github.com/arthurarrudaa/climacidadao-java
 
+Vídeo no Youtube: https://youtu.be/buLbuKO0RXA
+
 ======================= Integrantes =======================
 
 Álvaro Morais Holanda 1TDSPF - RM: 568607 Github: https://github.com/AlvaroHolanda Linkedin: https: https://www.linkedin.com/in/%C3%A1lvaro-holanda-b9bb03322/ 
