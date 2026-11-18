@@ -1,4 +1,5 @@
 import plantacoes from '../assets/img/plantacoes.png'
+import NavegacaoPaginas from '../components/NavegacaoPaginas'
 
 export default function QuemAjudariamos() {
   return (
@@ -29,6 +30,8 @@ export default function QuemAjudariamos() {
         determinado momento. Com os satélites aprimorados, a margem de erro seria muito menor, o que
         diminuiria a perda de safra do agricultor.
       </p>
+
+      <NavegacaoPaginas />
     </section>
   )
 }
