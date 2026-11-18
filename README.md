@@ -17,6 +17,8 @@ API no github: https://github.com/arthurarrudaa/climacidadao-java
 
 Vídeo no Youtube: https://youtu.be/buLbuKO0RXA
 
+Projeto na Vercel: https://global-solution-mu.vercel.app/
+
 ======================= Integrantes =======================
 
 Álvaro Morais Holanda 1TDSPF - RM: 568607 Github: https://github.com/AlvaroHolanda Linkedin: https: https://www.linkedin.com/in/%C3%A1lvaro-holanda-b9bb03322/ 
