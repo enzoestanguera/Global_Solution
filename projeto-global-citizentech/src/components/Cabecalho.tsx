@@ -9,9 +9,11 @@ export function Cabecalho() {
         to="/"
         className="flex items-center no-underline"
       >
-        <span className="font-['Poppins',sans-serif] text-3xl font-bold tracking-[0.05em] text-white">
-          C
-        </span>
+        <img
+          src="/src/assets/img/logo_ft.jpg"
+          alt="Logo"
+          className="h-16 w-auto shrink-0 object-contain"
+          />
       </Link>
 
       {/* Menu de navegação */}
