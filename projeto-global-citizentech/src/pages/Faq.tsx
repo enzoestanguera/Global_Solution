@@ -10,9 +10,9 @@ const textoResposta = 'm-0 px-4 pb-4 leading-[1.55] text-[var(--color-muted)]'
 
 const perguntas: PerguntaFaq[] = [
   {
-    pergunta: 'O que é o CitizenTech?',
+    pergunta: 'O que é o ClimateSafe?',
     resposta:
-      'O CitizenTech é um projeto acadêmico voltado à informação e à orientação climática. Sua proposta é ajudar os cidadãos a compreender melhor as condições meteorológicas e os riscos associados a eventos climáticos.'
+      'O ClimateSafe é um projeto acadêmico voltado à informação e à orientação climática. Sua proposta é ajudar os cidadãos a compreender melhor as condições meteorológicas e os riscos associados a eventos climáticos.'
   },
   {
     pergunta: 'Qual é o objetivo do projeto?',
@@ -27,15 +27,15 @@ const perguntas: PerguntaFaq[] = [
   {
     pergunta: 'Qual é a relação do projeto com os satélites?',
     resposta:
-      'Satélites meteorológicos são importantes fontes de informações sobre a atmosfera. O CitizenTech apresenta a proposta de utilizar dados espaciais para apoiar melhorias na análise das condições climáticas.'
+      'Satélites meteorológicos são importantes fontes de informações sobre a atmosfera. O ClimateSafe apresenta a proposta de utilizar dados espaciais para apoiar melhorias na análise das condições climáticas.'
   },
   {
-    pergunta: 'Quem pode se beneficiar do CitizenTech?',
+    pergunta: 'Quem pode se beneficiar do ClimateSafe?',
     resposta:
       'A proposta é voltada a cidadãos que desejam compreender melhor os riscos climáticos, especialmente pessoas que precisam planejar deslocamentos e atividades ao ar livre.'
   },
   {
-    pergunta: 'Quais problemas o CitizenTech busca abordar?',
+    pergunta: 'Quais problemas o ClimateSafe busca abordar?',
     resposta:
       'O projeto aborda os impactos das condições climáticas no cotidiano, incluindo chuvas intensas, enchentes, mudanças repentinas do tempo e dificuldades no planejamento de deslocamentos.'
   },
@@ -45,7 +45,7 @@ const perguntas: PerguntaFaq[] = [
       'O projeto utiliza um site desenvolvido em React e uma API Java com Spring Boot, JDBC e banco de dados Oracle. A API permite armazenar usuários, cidades favoritas, históricos de pesquisas e mensagens de contato.'
   },
   {
-    pergunta: 'O CitizenTech já fornece previsões em tempo real?',
+    pergunta: 'O ClimateSafe já fornece previsões em tempo real?',
     resposta:
       'Não nesta versão. O site apresenta a proposta do projeto, enquanto a API Java realiza o armazenamento de dados. A consulta automática a serviços meteorológicos externos ainda não foi implementada.'
   },
@@ -100,7 +100,7 @@ function Faq() {
           <h1>Perguntas frequentes</h1>
 
           <p className="m-0 max-w-[66ch] text-[var(--color-muted)]">
-            Reunimos aqui respostas para dúvidas frequentes sobre o projeto CitizenTech.
+            Reunimos aqui respostas para dúvidas frequentes sobre o projeto ClimateSafe.
           </p>
         </section>
 
